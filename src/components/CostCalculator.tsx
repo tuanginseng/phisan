@@ -32,6 +32,24 @@ const formatVND = (n: number) =>
 const formatPercent = (n: number) =>
   (n * 100).toFixed(2) + "%";
 
+const formatNumber = (n: number) =>
+  n ? n.toLocaleString("en-US") : "";
+
+const parseFormattedNumber = (s: string) => {
+  const num = Number(s.replace(/,/g, ""));
+  return isNaN(num) ? 0 : num;
+};
+
+const MoneyInput = ({ value, onChange, placeholder = "0" }: { value: number; onChange: (v: number) => void; placeholder?: string }) => (
+  <Input
+    type="text"
+    inputMode="numeric"
+    value={value ? formatNumber(value) : ""}
+    onChange={(e) => onChange(parseFormattedNumber(e.target.value))}
+    placeholder={placeholder}
+  />
+);
+
 const CostCalculator = () => {
   const [productName, setProductName] = useState("");
   const [costPrice, setCostPrice] = useState<number>(0);
