@@ -1,11 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Search, ChevronDown, Calculator } from "lucide-react";
+import { Search, ChevronDown, Calculator, Download } from "lucide-react";
+import { toPng } from "html-to-image";
 import feeData from "@/data/feeData.json";
 
 type FeeEntry = {
@@ -34,19 +36,38 @@ const CostCalculator = () => {
   const [productName, setProductName] = useState("");
   const [costPrice, setCostPrice] = useState<number>(0);
   const [sellingPrice, setSellingPrice] = useState<number>(0);
-  const [transactionFee, setTransactionFee] = useState<number>(5); // %
-  const [commissionFee, setCommissionFee] = useState<number>(0); // %
-  const [taxFee, setTaxFee] = useState<number>(1.5); // %
-  const [voucherFee, setVoucherFee] = useState<number>(3); // %
+  const [transactionFee, setTransactionFee] = useState<number>(5);
+  const [commissionFee, setCommissionFee] = useState<number>(0);
+  const [taxFee, setTaxFee] = useState<number>(1.5);
+  const [voucherFee, setVoucherFee] = useState<number>(3);
   const [infraFee, setInfraFee] = useState<number>(4620);
-  const [affRate, setAffRate] = useState<number>(10); // %
-  const [adsRate, setAdsRate] = useState<number>(15); // %
-  const [holdingRate, setHoldingRate] = useState<number>(0); // %
+  const [affRate, setAffRate] = useState<number>(10);
+  const [adsRate, setAdsRate] = useState<number>(15);
+  const [holdingRate, setHoldingRate] = useState<number>(0);
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
   const [feeType, setFeeType] = useState<"standard" | "mall">("standard");
   const [feeSearchOpen, setFeeSearchOpen] = useState(false);
   const [feeSearch, setFeeSearch] = useState("");
+
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadImage = useCallback(async () => {
+    if (!exportRef.current) return;
+    try {
+      const dataUrl = await toPng(exportRef.current, {
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        quality: 1,
+      });
+      const link = document.createElement("a");
+      link.download = `chi-phi-${productName || "san-pham"}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Export failed", err);
+    }
+  }, [productName]);
 
   const filteredFeeData = useMemo(() => {
     if (!feeSearch.trim()) return data.slice(0, 50);
@@ -276,9 +297,131 @@ const CostCalculator = () => {
           </div>
         </Card>
       )}
+      {/* Download Button */}
+      {sp > 0 && (
+        <div className="flex justify-end">
+          <Button onClick={handleDownloadImage} className="gap-2">
+            <Download className="h-4 w-4" />
+            Tải ảnh gửi khách
+          </Button>
+        </div>
+      )}
+
+      {/* Exportable Summary (hidden off-screen, captured for image) */}
+      <div className="fixed -left-[9999px] top-0">
+        <div ref={exportRef} style={{ width: 800, padding: 32, fontFamily: "sans-serif", background: "#fff" }}>
+          <div style={{ textAlign: "center", marginBottom: 24 }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a", margin: 0 }}>
+              BẢNG TÍNH CHI PHÍ SẢN PHẨM
+            </h2>
+            {productName && (
+              <p style={{ fontSize: 16, color: "#555", marginTop: 6 }}>{productName}</p>
+            )}
+          </div>
+
+          {/* Product Info Table */}
+          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20, fontSize: 14 }}>
+            <tbody>
+              <tr style={{ background: "#f97316", color: "#fff" }}>
+                <td colSpan={4} style={{ padding: "8px 12px", fontWeight: 700, fontSize: 15 }}>
+                  THÔNG TIN SẢN PHẨM
+                </td>
+              </tr>
+              <ExportRow label="Giá nhập" value={formatVND(cp)} label2="Giá bán" value2={formatVND(sp)} />
+              <ExportRow label="Tỷ lệ giá nhập/bán" value={formatPercent(costRatio)} label2="Ngành hàng" value2={selectedFeeItem ? `${selectedFeeItem.cap2 || selectedFeeItem.cap1} (${feeType === "mall" ? "Mall" : "TC"})` : "—"} />
+            </tbody>
+          </table>
+
+          {/* Fee Breakdown Table */}
+          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20, fontSize: 14 }}>
+            <thead>
+              <tr style={{ background: "#f97316", color: "#fff" }}>
+                <td style={{ padding: "8px 12px", fontWeight: 700 }}>LOẠI PHÍ</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>TỶ LỆ</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>SỐ TIỀN</td>
+              </tr>
+            </thead>
+            <tbody>
+              <ExportFeeRow label="Phí giao dịch" rate={`${transactionFee}%`} amount={formatVND(transactionAmount)} even />
+              <ExportFeeRow label="Phí hoa hồng" rate={`${commissionFee}%`} amount={formatVND(commissionAmount)} />
+              <ExportFeeRow label="Thuế" rate={`${taxFee}%`} amount={formatVND(taxAmount)} even />
+              <ExportFeeRow label="Voucher / Chương trình" rate={`${voucherFee}%`} amount={formatVND(voucherAmount)} />
+              <ExportFeeRow label="Phí hạ tầng + bồi hoàn" rate="Cố định" amount={formatVND(infraFee)} even />
+              <ExportFeeRow label="Chi phí TN Holding" rate={`${holdingRate}%`} amount={formatVND(holdingAmount)} />
+              <tr style={{ background: "#fff7ed", fontWeight: 700 }}>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>TỔNG PHÍ NỀN TẢNG</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatPercent((totalPlatformFee + holdingAmount) / sp)}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(totalPlatformFee + holdingAmount)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Channel Costs */}
+          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20, fontSize: 14 }}>
+            <thead>
+              <tr style={{ background: "#3b82f6", color: "#fff" }}>
+                <td style={{ padding: "8px 12px", fontWeight: 700 }}>CHI PHÍ KÊNH BÁN</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>TỶ LỆ</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>SỐ TIỀN</td>
+              </tr>
+            </thead>
+            <tbody>
+              <ExportFeeRow label="AFF / KOC Tiếp thị" rate={`${affRate}%`} amount={formatVND(affAmount)} even />
+              <ExportFeeRow label="ADS / Quảng cáo" rate={`${adsRate}%`} amount={formatVND(adsAmount)} />
+            </tbody>
+          </table>
+
+          {/* Profit Summary */}
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+            <thead>
+              <tr style={{ background: "#16a34a", color: "#fff" }}>
+                <td style={{ padding: "8px 12px", fontWeight: 700 }}>LỢI NHUẬN THEO KÊNH</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>SỐ TIỀN</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>TỶ LỆ / GIÁ BÁN</td>
+              </tr>
+            </thead>
+            <tbody>
+              <ExportProfitRow label="Natural (Tự nhiên)" amount={profitNatural} pct={profitNaturalPct} even />
+              <ExportProfitRow label="AFF (KOC Tiếp thị)" amount={profitAff} pct={profitAffPct} />
+              <ExportProfitRow label="ADS (Quảng cáo)" amount={profitAds} pct={profitAdsPct} even />
+              <ExportProfitRow label="AFF + ADS" amount={profitAffAds} pct={profitAffAdsPct} />
+            </tbody>
+          </table>
+
+          <p style={{ textAlign: "center", fontSize: 11, color: "#999", marginTop: 20 }}>
+            Tạo bởi Công cụ tính phí sàn • {new Date().toLocaleDateString("vi-VN")}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
+
+/* Export table helper components */
+const ExportRow = ({ label, value, label2, value2 }: { label: string; value: string; label2: string; value2: string }) => (
+  <tr>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", color: "#666", width: "25%" }}>{label}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", fontWeight: 600, width: "25%" }}>{value}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", color: "#666", width: "25%" }}>{label2}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", fontWeight: 600, width: "25%" }}>{value2}</td>
+  </tr>
+);
+
+const ExportFeeRow = ({ label, rate, amount, even }: { label: string; rate: string; amount: string; even?: boolean }) => (
+  <tr style={{ background: even ? "#fafafa" : "#fff" }}>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>{label}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{rate}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{amount}</td>
+  </tr>
+);
+
+const ExportProfitRow = ({ label, amount, pct, even }: { label: string; amount: number; pct: number; even?: boolean }) => (
+  <tr style={{ background: even ? "#fafafa" : "#fff" }}>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>{label}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right", fontWeight: 700, color: amount >= 0 ? "#16a34a" : "#dc2626" }}>{formatVND(amount)}</td>
+    <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right", color: amount >= 0 ? "#16a34a" : "#dc2626" }}>{formatPercent(pct)}</td>
+  </tr>
+);
 
 const ProfitCard = ({ label, profit, pct }: { label: string; profit: number; pct: number }) => (
   <div className={`rounded-lg border p-3 ${profit >= 0 ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
