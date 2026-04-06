@@ -269,7 +269,7 @@ const CostCalculator = () => {
 
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Phí hạ tầng + bồi hoàn (VNĐ)</Label>
-            <Input type="number" value={infraFee} onChange={(e) => setInfraFee(Number(e.target.value))} />
+            <MoneyInput value={infraFee} onChange={setInfraFee} />
           </div>
 
           <div className="space-y-1.5">
