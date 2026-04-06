@@ -36,19 +36,38 @@ const CostCalculator = () => {
   const [productName, setProductName] = useState("");
   const [costPrice, setCostPrice] = useState<number>(0);
   const [sellingPrice, setSellingPrice] = useState<number>(0);
-  const [transactionFee, setTransactionFee] = useState<number>(5); // %
-  const [commissionFee, setCommissionFee] = useState<number>(0); // %
-  const [taxFee, setTaxFee] = useState<number>(1.5); // %
-  const [voucherFee, setVoucherFee] = useState<number>(3); // %
+  const [transactionFee, setTransactionFee] = useState<number>(5);
+  const [commissionFee, setCommissionFee] = useState<number>(0);
+  const [taxFee, setTaxFee] = useState<number>(1.5);
+  const [voucherFee, setVoucherFee] = useState<number>(3);
   const [infraFee, setInfraFee] = useState<number>(4620);
-  const [affRate, setAffRate] = useState<number>(10); // %
-  const [adsRate, setAdsRate] = useState<number>(15); // %
-  const [holdingRate, setHoldingRate] = useState<number>(0); // %
+  const [affRate, setAffRate] = useState<number>(10);
+  const [adsRate, setAdsRate] = useState<number>(15);
+  const [holdingRate, setHoldingRate] = useState<number>(0);
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
   const [feeType, setFeeType] = useState<"standard" | "mall">("standard");
   const [feeSearchOpen, setFeeSearchOpen] = useState(false);
   const [feeSearch, setFeeSearch] = useState("");
+
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadImage = useCallback(async () => {
+    if (!exportRef.current) return;
+    try {
+      const dataUrl = await toPng(exportRef.current, {
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        quality: 1,
+      });
+      const link = document.createElement("a");
+      link.download = `chi-phi-${productName || "san-pham"}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Export failed", err);
+    }
+  }, [productName]);
 
   const filteredFeeData = useMemo(() => {
     if (!feeSearch.trim()) return data.slice(0, 50);
