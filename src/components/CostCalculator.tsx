@@ -150,7 +150,7 @@ const CostCalculator = () => {
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Giá nhập (VNĐ)</Label>
-            <Input type="number" value={costPrice || ""} onChange={(e) => setCostPrice(Number(e.target.value))} placeholder="0" />
+            <MoneyInput value={costPrice} onChange={setCostPrice} />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Giá bán (VNĐ)</Label>
