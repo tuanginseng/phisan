@@ -234,8 +234,9 @@ const CostCalculator = () => {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (VNĐ)</Label>
-            <Input type="number" value={holdingCost} onChange={(e) => setHoldingCost(Number(e.target.value))} />
+            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (%)</Label>
+            <Input type="number" step="0.1" value={holdingRate} onChange={(e) => setHoldingRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(holdingAmount)}</p>}
           </div>
         </div>
         {sp > 0 && (
