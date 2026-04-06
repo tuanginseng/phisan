@@ -32,6 +32,24 @@ const formatVND = (n: number) =>
 const formatPercent = (n: number) =>
   (n * 100).toFixed(2) + "%";
 
+const formatNumber = (n: number) =>
+  n ? n.toLocaleString("en-US") : "";
+
+const parseFormattedNumber = (s: string) => {
+  const num = Number(s.replace(/,/g, ""));
+  return isNaN(num) ? 0 : num;
+};
+
+const MoneyInput = ({ value, onChange, placeholder = "0" }: { value: number; onChange: (v: number) => void; placeholder?: string }) => (
+  <Input
+    type="text"
+    inputMode="numeric"
+    value={value ? formatNumber(value) : ""}
+    onChange={(e) => onChange(parseFormattedNumber(e.target.value))}
+    placeholder={placeholder}
+  />
+);
+
 const CostCalculator = () => {
   const [productName, setProductName] = useState("");
   const [costPrice, setCostPrice] = useState<number>(0);
@@ -132,11 +150,11 @@ const CostCalculator = () => {
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Giá nhập (VNĐ)</Label>
-            <Input type="number" value={costPrice || ""} onChange={(e) => setCostPrice(Number(e.target.value))} placeholder="0" />
+            <MoneyInput value={costPrice} onChange={setCostPrice} />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Giá bán (VNĐ)</Label>
-            <Input type="number" value={sellingPrice || ""} onChange={(e) => setSellingPrice(Number(e.target.value))} placeholder="0" />
+            <MoneyInput value={sellingPrice} onChange={setSellingPrice} />
           </div>
         </div>
         {sp > 0 && (
@@ -251,7 +269,7 @@ const CostCalculator = () => {
 
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Phí hạ tầng + bồi hoàn (VNĐ)</Label>
-            <Input type="number" value={infraFee} onChange={(e) => setInfraFee(Number(e.target.value))} />
+            <MoneyInput value={infraFee} onChange={setInfraFee} />
           </div>
 
           <div className="space-y-1.5">
