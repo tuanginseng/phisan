@@ -154,7 +154,7 @@ const CostCalculator = () => {
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Giá bán (VNĐ)</Label>
-            <Input type="number" value={sellingPrice || ""} onChange={(e) => setSellingPrice(Number(e.target.value))} placeholder="0" />
+            <MoneyInput value={sellingPrice} onChange={setSellingPrice} />
           </div>
         </div>
         {sp > 0 && (
