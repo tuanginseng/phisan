@@ -41,7 +41,7 @@ const CostCalculator = () => {
   const [infraFee, setInfraFee] = useState<number>(4620);
   const [affRate, setAffRate] = useState<number>(10); // %
   const [adsRate, setAdsRate] = useState<number>(15); // %
-  const [holdingCost, setHoldingCost] = useState<number>(0);
+  const [holdingRate, setHoldingRate] = useState<number>(0); // %
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
   const [feeType, setFeeType] = useState<"standard" | "mall">("standard");
@@ -79,11 +79,12 @@ const CostCalculator = () => {
   const taxAmount = sp * (taxFee / 100);
   const voucherAmount = sp * (voucherFee / 100);
 
+  const holdingAmount = sp * (holdingRate / 100);
   const totalPlatformFee = transactionAmount + commissionAmount + taxAmount + voucherAmount + infraFee;
   const affAmount = sp * (affRate / 100);
   const adsAmount = sp * (adsRate / 100);
 
-  const profitNatural = sp - cp - totalPlatformFee - holdingCost;
+  const profitNatural = sp - cp - totalPlatformFee - holdingAmount;
   const profitAff = profitNatural - affAmount;
   const profitAds = profitNatural - adsAmount;
   const profitAffAds = profitNatural - affAmount - adsAmount;
@@ -233,8 +234,9 @@ const CostCalculator = () => {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (VNĐ)</Label>
-            <Input type="number" value={holdingCost} onChange={(e) => setHoldingCost(Number(e.target.value))} />
+            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (%)</Label>
+            <Input type="number" step="0.1" value={holdingRate} onChange={(e) => setHoldingRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(holdingAmount)}</p>}
           </div>
         </div>
         {sp > 0 && (
