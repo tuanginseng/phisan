@@ -315,7 +315,7 @@ const CostCalculator = () => {
             </div>
             <div className="rounded-lg border border-orange-200 bg-orange-50 p-3">
               <p className="text-xs font-semibold text-orange-700 mb-1">AFF + ADS</p>
-              <p className="text-sm">{affRate + adsRate}% = <span className="font-bold">{formatVND(affAmount + adsAmount)}</span></p>
+              <p className="text-sm">{affAdsRate}% = <span className="font-bold">{formatVND(affAdsAmount)}</span></p>
             </div>
           </div>
         )}
