@@ -61,6 +61,7 @@ const CostCalculator = () => {
   const [infraFee, setInfraFee] = useState<number>(4620);
   const [affRate, setAffRate] = useState<number>(10);
   const [adsRate, setAdsRate] = useState<number>(15);
+  const [affAdsRate, setAffAdsRate] = useState<number>(25);
   const [holdingRate, setHoldingRate] = useState<number>(0);
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
@@ -122,11 +123,12 @@ const CostCalculator = () => {
   const totalPlatformFee = transactionAmount + commissionAmount + taxAmount + voucherAmount + infraFee;
   const affAmount = sp * (affRate / 100);
   const adsAmount = sp * (adsRate / 100);
+  const affAdsAmount = sp * (affAdsRate / 100);
 
   const profitNatural = sp - cp - totalPlatformFee - holdingAmount;
   const profitAff = profitNatural - affAmount;
   const profitAds = profitNatural - adsAmount;
-  const profitAffAds = profitNatural - affAmount - adsAmount;
+  const profitAffAds = profitNatural - affAdsAmount;
 
   const profitNaturalPct = sp > 0 ? profitNatural / sp : 0;
   const profitAffPct = sp > 0 ? profitAff / sp : 0;
@@ -294,12 +296,12 @@ const CostCalculator = () => {
             <Label className="text-xs text-muted-foreground">AFF / KOC Tiếp thị (%)</Label>
             <Input type="number" step="0.1" value={affRate} onChange={(e) => setAffRate(Number(e.target.value))} />
             {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(affAmount)}</p>}
-          </div>
           <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">ADS / Quảng cáo (%)</Label>
-            <Input type="number" step="0.1" value={adsRate} onChange={(e) => setAdsRate(Number(e.target.value))} />
-            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(adsAmount)}</p>}
+            <Label className="text-xs text-muted-foreground">AFF + ADS (%)</Label>
+            <Input type="number" step="0.1" value={affAdsRate} onChange={(e) => setAffAdsRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(affAdsAmount)}</p>}
           </div>
+        </div>
         </div>
         {sp > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-border">
@@ -313,7 +315,7 @@ const CostCalculator = () => {
             </div>
             <div className="rounded-lg border border-orange-200 bg-orange-50 p-3">
               <p className="text-xs font-semibold text-orange-700 mb-1">AFF + ADS</p>
-              <p className="text-sm">{affRate + adsRate}% = <span className="font-bold">{formatVND(affAmount + adsAmount)}</span></p>
+              <p className="text-sm">{affAdsRate}% = <span className="font-bold">{formatVND(affAdsAmount)}</span></p>
             </div>
           </div>
         )}
@@ -404,8 +406,8 @@ const CostCalculator = () => {
               <ExportFeeRow label="ADS / Quảng cáo" rate={`${adsRate}%`} amount={formatVND(adsAmount)} />
               <tr style={{ background: "#eff6ff", fontWeight: 700 }}>
                 <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>AFF + ADS</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{affRate + adsRate}%</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(affAmount + adsAmount)}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{affAdsRate}%</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(affAdsAmount)}</td>
               </tr>
             </tbody>
           </table>
