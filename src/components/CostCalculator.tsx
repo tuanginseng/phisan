@@ -301,6 +301,22 @@ const CostCalculator = () => {
             {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(adsAmount)}</p>}
           </div>
         </div>
+        {sp > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-border">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <p className="text-xs font-semibold text-blue-700 mb-1">AFF (Tiếp thị)</p>
+              <p className="text-sm">{affRate}% = <span className="font-bold">{formatVND(affAmount)}</span></p>
+            </div>
+            <div className="rounded-lg border border-purple-200 bg-purple-50 p-3">
+              <p className="text-xs font-semibold text-purple-700 mb-1">ADS (Quảng cáo)</p>
+              <p className="text-sm">{adsRate}% = <span className="font-bold">{formatVND(adsAmount)}</span></p>
+            </div>
+            <div className="rounded-lg border border-orange-200 bg-orange-50 p-3">
+              <p className="text-xs font-semibold text-orange-700 mb-1">AFF + ADS</p>
+              <p className="text-sm">{affRate + adsRate}% = <span className="font-bold">{formatVND(affAmount + adsAmount)}</span></p>
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* Profit Summary */}
