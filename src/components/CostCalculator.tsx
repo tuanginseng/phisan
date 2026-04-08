@@ -406,8 +406,8 @@ const CostCalculator = () => {
               <ExportFeeRow label="ADS / Quảng cáo" rate={`${adsRate}%`} amount={formatVND(adsAmount)} />
               <tr style={{ background: "#eff6ff", fontWeight: 700 }}>
                 <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>AFF + ADS</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{affRate + adsRate}%</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(affAmount + adsAmount)}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{affAdsRate}%</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(affAdsAmount)}</td>
               </tr>
             </tbody>
           </table>
