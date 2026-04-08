@@ -291,17 +291,22 @@ const CostCalculator = () => {
       {/* Channel Costs */}
       <Card className="p-5 space-y-4">
         <h3 className="font-semibold text-foreground">Chi phí kênh bán</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">AFF / KOC Tiếp thị (%)</Label>
             <Input type="number" step="0.1" value={affRate} onChange={(e) => setAffRate(Number(e.target.value))} />
             {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(affAmount)}</p>}
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-muted-foreground">ADS / Quảng cáo (%)</Label>
+            <Input type="number" step="0.1" value={adsRate} onChange={(e) => setAdsRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(adsAmount)}</p>}
+          </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">AFF + ADS (%)</Label>
             <Input type="number" step="0.1" value={affAdsRate} onChange={(e) => setAffAdsRate(Number(e.target.value))} />
             {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(affAdsAmount)}</p>}
           </div>
-        </div>
         </div>
         {sp > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-border">
