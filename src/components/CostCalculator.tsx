@@ -277,16 +277,34 @@ const CostCalculator = () => {
             <MoneyInput value={infraFee} onChange={setInfraFee} />
           </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (%)</Label>
-            <Input type="number" step="0.1" value={holdingRate} onChange={(e) => setHoldingRate(Number(e.target.value))} />
-            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(holdingAmount)}</p>}
-          </div>
         </div>
         {sp > 0 && (
           <div className="pt-2 border-t border-border text-sm">
             Tổng phí nền tảng: <span className="font-bold text-foreground">{formatVND(totalPlatformFee)}</span>
             <span className="text-muted-foreground ml-2">({formatPercent(totalPlatformFee / sp)})</span>
+          </div>
+        )}
+      </Card>
+
+      {/* Other Fees */}
+      <Card className="p-5 space-y-4">
+        <h3 className="font-semibold text-foreground">Phí khác</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <Label className="text-xs text-muted-foreground">Chi phí TN Holding (%)</Label>
+            <Input type="number" step="0.1" value={holdingRate} onChange={(e) => setHoldingRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(holdingAmount)}</p>}
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-muted-foreground">Phí đóng gói (%)</Label>
+            <Input type="number" step="0.1" value={packagingRate} onChange={(e) => setPackagingRate(Number(e.target.value))} />
+            {sp > 0 && <p className="text-xs text-muted-foreground">= {formatVND(packagingAmount)}</p>}
+          </div>
+        </div>
+        {sp > 0 && (
+          <div className="pt-2 border-t border-border text-sm">
+            Tổng phí khác: <span className="font-bold text-foreground">{formatVND(otherFeeAmount)}</span>
+            <span className="text-muted-foreground ml-2">({formatPercent(otherFeeAmount / sp)})</span>
           </div>
         )}
       </Card>
