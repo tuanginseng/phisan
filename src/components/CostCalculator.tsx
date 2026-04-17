@@ -409,11 +409,30 @@ const CostCalculator = () => {
               <ExportFeeRow label="Thuế" rate={`${taxFee}%`} amount={formatVND(taxAmount)} even />
               <ExportFeeRow label="Voucher / Chương trình" rate={`${voucherFee}%`} amount={formatVND(voucherAmount)} />
               <ExportFeeRow label="Phí hạ tầng + bồi hoàn" rate="Cố định" amount={formatVND(infraFee)} even />
-              <ExportFeeRow label="Chi phí TN Holding" rate={`${holdingRate}%`} amount={formatVND(holdingAmount)} />
               <tr style={{ background: "#fff7ed", fontWeight: 700 }}>
                 <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>TỔNG PHÍ NỀN TẢNG</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatPercent((totalPlatformFee + holdingAmount) / sp)}</td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(totalPlatformFee + holdingAmount)}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{sp > 0 ? formatPercent(totalPlatformFee / sp) : "—"}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(totalPlatformFee)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Other Fees */}
+          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20, fontSize: 14 }}>
+            <thead>
+              <tr style={{ background: "#a855f7", color: "#fff" }}>
+                <td style={{ padding: "8px 12px", fontWeight: 700 }}>PHÍ KHÁC</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>TỶ LỆ</td>
+                <td style={{ padding: "8px 12px", fontWeight: 700, textAlign: "right" }}>SỐ TIỀN</td>
+              </tr>
+            </thead>
+            <tbody>
+              <ExportFeeRow label="Chi phí TN Holding" rate={`${holdingRate}%`} amount={formatVND(holdingAmount)} even />
+              <ExportFeeRow label="Phí đóng gói" rate={`${packagingRate}%`} amount={formatVND(packagingAmount)} />
+              <tr style={{ background: "#faf5ff", fontWeight: 700 }}>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5" }}>TỔNG PHÍ KHÁC</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{sp > 0 ? formatPercent(otherFeeAmount / sp) : "—"}</td>
+                <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e5e5", textAlign: "right" }}>{formatVND(otherFeeAmount)}</td>
               </tr>
             </tbody>
           </table>
