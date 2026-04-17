@@ -63,6 +63,7 @@ const CostCalculator = () => {
   const [adsRate, setAdsRate] = useState<number>(15);
   const [affAdsRate, setAffAdsRate] = useState<number>(25);
   const [holdingRate, setHoldingRate] = useState<number>(0);
+  const [packagingRate, setPackagingRate] = useState<number>(0);
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
   const [feeType, setFeeType] = useState<"standard" | "mall">("standard");
