@@ -121,12 +121,14 @@ const CostCalculator = () => {
   const voucherAmount = sp * (voucherFee / 100);
 
   const holdingAmount = sp * (holdingRate / 100);
+  const packagingAmount = sp * (packagingRate / 100);
+  const otherFeeAmount = holdingAmount + packagingAmount;
   const totalPlatformFee = transactionAmount + commissionAmount + taxAmount + voucherAmount + infraFee;
   const affAmount = sp * (affRate / 100);
   const adsAmount = sp * (adsRate / 100);
   const affAdsAmount = sp * (affAdsRate / 100);
 
-  const profitNatural = sp - cp - totalPlatformFee - holdingAmount;
+  const profitNatural = sp - cp - totalPlatformFee - otherFeeAmount;
   const profitAff = profitNatural - affAmount;
   const profitAds = profitNatural - adsAmount;
   const profitAffAds = profitNatural - affAdsAmount;
