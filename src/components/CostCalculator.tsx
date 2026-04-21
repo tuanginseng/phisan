@@ -476,7 +476,7 @@ const CostCalculator = () => {
 
           <div style={{ marginTop: 24, padding: 16, background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, textAlign: "center" }}>
             <p style={{ fontSize: 14, fontWeight: 700, color: "#9a3412", margin: 0 }}>
-              Công cụ thuộc TN Holding — có vận hành nhận 3-5% doanh thu
+              Công cụ thuộc TN Holding — có vận hành shop nhận 3-5% doanh thu
             </p>
             <p style={{ fontSize: 13, color: "#9a3412", marginTop: 6, marginBottom: 0 }}>
               Zalo: <span style={{ fontWeight: 700 }}>0968.104.995</span> (Mr Tuấn)
