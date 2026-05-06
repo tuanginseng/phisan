@@ -15,7 +15,7 @@ const Index = () => {
           </p>
           <div className="mt-2 text-xs text-muted-foreground space-y-0.5">
             <p>
-              Công cụ thuộc <span className="font-semibold text-foreground">TN Holding</span> — vận hành shop từ A-Z nhận <span className="font-semibold text-foreground">3-5% doanh thu</span>
+              Công cụ thuộc <span className="font-semibold text-foreground">TN Holding</span> — vận hành shop từ A-Z nhận <span className="font-semibold text-foreground">3-7% doanh thu</span>
             </p>
             <p>
               Zalo: <a href="https://zalo.me/0968104995" className="font-semibold text-primary hover:underline">0968.104.995</a> (Mr Tuấn)
