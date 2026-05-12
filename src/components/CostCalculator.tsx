@@ -54,16 +54,16 @@ const CostCalculator = () => {
   const [productName, setProductName] = useState("");
   const [costPrice, setCostPrice] = useState<number>(0);
   const [sellingPrice, setSellingPrice] = useState<number>(0);
-  const [transactionFee, setTransactionFee] = useState<number>(5);
+  const [transactionFee, setTransactionFee] = useState<number>(6);
   const [commissionFee, setCommissionFee] = useState<number>(0);
   const [taxFee, setTaxFee] = useState<number>(1.5);
-  const [voucherFee, setVoucherFee] = useState<number>(3);
+  const [voucherFee, setVoucherFee] = useState<number>(4);
   const [infraFee, setInfraFee] = useState<number>(4620);
   const [affRate, setAffRate] = useState<number>(10);
   const [adsRate, setAdsRate] = useState<number>(15);
   const [affAdsRate, setAffAdsRate] = useState<number>(25);
   const [holdingRate, setHoldingRate] = useState<number>(0);
-  const [packagingRate, setPackagingRate] = useState<number>(0);
+  const [packagingRate, setPackagingRate] = useState<number>(3);
 
   const [selectedFeeItem, setSelectedFeeItem] = useState<FeeEntry | null>(null);
   const [feeType, setFeeType] = useState<"standard" | "mall">("standard");
@@ -476,7 +476,7 @@ const CostCalculator = () => {
 
           <div style={{ marginTop: 24, padding: 16, background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, textAlign: "center" }}>
             <p style={{ fontSize: 14, fontWeight: 700, color: "#9a3412", margin: 0 }}>
-              Công cụ thuộc TN Holding — vận hành shop từ A-Z nhận 3-5% doanh thu
+              Công cụ thuộc TN Holding — vận hành shop từ A-Z nhận 3-7% doanh thu
             </p>
             <p style={{ fontSize: 13, color: "#9a3412", marginTop: 6, marginBottom: 0 }}>
               Zalo: <span style={{ fontWeight: 700 }}>0968.104.995</span> (Mr Tuấn)
